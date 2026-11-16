@@ -6,6 +6,7 @@ public class ActualizarCreditoDTO {
     private BigDecimal limiteCredito;
     private Integer diasCredito;
     private Boolean creditoHabilitado;
+    private String estatusCredito;
 
     // Genera los Getters y Setters
     public BigDecimal getLimiteCredito() {
@@ -30,5 +31,13 @@ public class ActualizarCreditoDTO {
 
     public void setCreditoHabilitado(Boolean creditoHabilitado) {
         this.creditoHabilitado = creditoHabilitado;
+    }
+
+    public String getEstatusCredito() {
+        return estatusCredito;
+    }
+
+    public void setEstatusCredito(String estatusCredito) {
+        this.estatusCredito = estatusCredito;
     }
 }

@@ -25,6 +25,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.imprenta.personas.dto.ActualizarCreditoDTO;
 import com.imprenta.personas.dto.AprobarCreditoRequest;
 import com.imprenta.personas.model.Cliente;
+import com.imprenta.personas.dto.ClienteUltimaCompraDTO;
 import com.imprenta.personas.model.DocumentoCliente;
 import com.imprenta.personas.service.ClienteService;
 import com.imprenta.personas.service.DocumentoService;
@@ -166,5 +167,20 @@ public class ClienteController {
 
         Cliente clienteActualizado = clienteService.actualizarCredito(idCliente, dto);
         return ResponseEntity.ok(clienteActualizado);
+    }
+
+    @GetMapping
+    public ResponseEntity<List<Cliente>> listarCliente(@RequestParam(required = false, name = "tipo") String tipo) {
+
+        List<Cliente> clientes = clienteService.obtenerClientePorTIpo(tipo);
+        return ResponseEntity.ok(clientes);
+    }
+
+    @GetMapping("/{id}/ultima-compra")
+    public ResponseEntity<ClienteUltimaCompraDTO> obtenerClienteConCompra(@PathVariable Integer id) {
+
+        return clienteService.obtenerClienteConUltimaCompraPorId(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
 }
