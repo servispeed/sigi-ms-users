@@ -1,6 +1,8 @@
 package com.imprenta.personas.service;
 
 import java.util.List;
+import java.util.Optional;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -8,6 +10,7 @@ import com.imprenta.personas.model.Cliente;
 import com.imprenta.personas.repository.ClienteRepository;
 import com.imprenta.personas.dto.ActualizarCreditoDTO;
 import com.imprenta.personas.dto.AprobarCreditoRequest;
+import com.imprenta.personas.dto.ClienteUltimaCompraDTO;
 import com.imprenta.personas.exception.*;
 
 @Service
@@ -129,8 +132,22 @@ public class ClienteService {
             cliente.setDiasCredito(dto.getDiasCredito());
         if (dto.getCreditoHabilitado() != null)
             cliente.setCreditoHabilitado(dto.getCreditoHabilitado());
+        if (dto.getEstatusCredito() != null)
+            cliente.setEstatusCredito(dto.getEstatusCredito());
 
         return clienteRepository.save(cliente);
     }
 
+    public List<Cliente> obtenerClientePorTIpo(String tipo) {
+        if ("factura".equalsIgnoreCase(tipo)) {
+            return clienteRepository.findClientesFactura();
+        } else if ("mostrador".equalsIgnoreCase(tipo)) {
+            return clienteRepository.findClientesMostrador();
+        }
+        return clienteRepository.findAll();
+    }
+
+    public Optional<ClienteUltimaCompraDTO> obtenerClienteConUltimaCompraPorId(Integer id) {
+        return clienteRepository.findByIdConUltimaCompra(id);
+    }
 }

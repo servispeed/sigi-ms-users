@@ -1,6 +1,8 @@
 package com.imprenta.personas.controller;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.imprenta.personas.dto.CambiarPasswordDTO;
 import com.imprenta.personas.dto.UsuarioDTO;
 import com.imprenta.personas.model.Usuario;
 import com.imprenta.personas.service.UsuarioService;
@@ -82,6 +85,19 @@ public class UsuarioController {
     @GetMapping("/disenadores")
     public ResponseEntity<List<UsuarioDTO>> getDisenadores() {
         return ResponseEntity.ok(usuarioService.obtenerListaDeDisenadores());
+    }
+
+    @PutMapping("/{idUsuario}/cambiar-password")
+    public ResponseEntity<Map<String, String>> cambiarPassword(
+            @PathVariable Integer idUsuario,
+            @RequestBody CambiarPasswordDTO cambiarPasswordDTO) {
+        usuarioService.cambiarContrasena(idUsuario,
+                cambiarPasswordDTO.getPasswordActual(),
+                cambiarPasswordDTO.getNuevaPassword());
+
+        Map<String, String> response = new HashMap<>();
+        response.put("mensaje", "Contraseña actualizada exitosamente");
+        return ResponseEntity.ok(response);
     }
 
 }

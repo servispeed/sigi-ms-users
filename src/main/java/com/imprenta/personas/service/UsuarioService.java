@@ -11,6 +11,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.imprenta.personas.repository.UsuarioRepository;
 
+import jakarta.transaction.Transactional;
+
 @Service
 public class UsuarioService {
 
@@ -99,5 +101,19 @@ public class UsuarioService {
         dto.setIdRol(u.getRol());
 
         return dto;
+    }
+
+    @Transactional
+    public void cambiarContrasena(Integer idUsuario, String passwordActual, String nuevaPassword) {
+        Usuario usuario = usuarioRepository.findById(idUsuario)
+                .orElseThrow(() -> new ResourceNotFoundException("Usuario con ID " + idUsuario + " no encontrado"));
+
+        if (!passwordEncoder.matches(passwordActual, usuario.getPassword())) {
+            throw new BadRequestException("La contraseña actual es incorrecta");
+        }
+        String hashNuevaPassword = passwordEncoder.encode(nuevaPassword);
+
+        usuario.setPassword(hashNuevaPassword);
+        usuarioRepository.save(usuario);
     }
 }
