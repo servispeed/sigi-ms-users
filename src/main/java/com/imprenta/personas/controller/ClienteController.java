@@ -169,8 +169,9 @@ public class ClienteController {
         return ResponseEntity.ok(clienteActualizado);
     }
 
-    @GetMapping
-    public ResponseEntity<List<Cliente>> listarCliente(@RequestParam(required = false, name = "tipo") String tipo) {
+    @GetMapping(params = "tipo")
+    public ResponseEntity<List<Cliente>> listarCliente(
+            @RequestParam(name = "tipo") String tipo) {
 
         List<Cliente> clientes = clienteService.obtenerClientePorTIpo(tipo);
         return ResponseEntity.ok(clientes);
